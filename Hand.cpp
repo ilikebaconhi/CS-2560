@@ -29,9 +29,20 @@ void Hand::addCard(Deck& temp) {
 
 int Hand::totalValue() {
     int total = 0;
-    for (int i = 0; i < cards.size(); i++) {
+    int aceCount = 0;
+
+    for (int i = 0; i < static_cast<int>(cards.size()); i++) {
         total += cards[i].getValue();
+        if (cards[i].getFace() == "Ace") {
+            aceCount++;
+        }
     }
+
+    while (total > 21 && aceCount > 0) {
+        total -= 10;
+        aceCount--;
+    }
+
     return total;
 }
 
