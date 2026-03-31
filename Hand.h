@@ -14,11 +14,11 @@ class Hand{
         int acePosition;
         bool isAce;
     public:
+        Hand();
         void addCard(Deck& temp);
         int totalValue();
         void printHand();
         Card getCard(int pos);
-        Hand();
 
 
 };

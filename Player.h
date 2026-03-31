@@ -12,7 +12,7 @@ class Player{
         string name;
         Hand hand;
         int chips;
-        int currrentBet;
+        int currentBet;
         int wins;
 
     public: 
