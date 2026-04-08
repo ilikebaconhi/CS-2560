@@ -9,6 +9,8 @@ using namespace std;
 
 int main(){
   string playAgain = "yes";
-
-  Player player("Player", 1000);
+  string playerName;
+  cout << "Welcome to the blackjack table" << end;
+  cout << "Please enter your name" << endl;
+  cin >> playerName;
 }
