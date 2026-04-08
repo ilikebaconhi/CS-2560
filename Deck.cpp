@@ -5,7 +5,7 @@
 #include "Card.h"
 using namespace std;  
 
-Deck::Deck(){
+Deck::Deck() {
     nextCard = -1;
 
     string face = "";

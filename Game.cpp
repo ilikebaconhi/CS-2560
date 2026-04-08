@@ -1,16 +1,27 @@
+#include "AIPlayer.h"
+#include "Card.h"
+#include "Deck.h"
+#include "Hand.h"
+#include "Player.h"
 #include <iostream>
 #include <string>
-#include "Deck.h"
-#include "Player.h"
-#include "AIPlayer.h"
-#include "Scoreboard.h"
 
 using namespace std;
 
-int main(){
+int main() {
   string playAgain = "yes";
   string playerName;
-  cout << "Welcome to the blackjack table" << end;
-  cout << "Please enter your name" << endl;
+  Deck gameDeck;
+  Hand playerHand;
+  Hand opponentHand;
+
+  cout << "Welcome to the BlackJack Table." << endl;
+  cout << "Please enter your name: ";
   cin >> playerName;
+
+  playerHand.addCard(gameDeck);
+  playerHand.addCard(gameDeck);
+
+  playerHand.printHand();
 }
+

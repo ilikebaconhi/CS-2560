@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 using namespace std;
+
 Hand::Hand() {
     currentPosition = -1;
     acePosition = -1;

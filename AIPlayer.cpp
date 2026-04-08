@@ -14,7 +14,7 @@ void AIPlayer::observeCard(const Card& card){
 
     if(val >= 2 && val <= 6){
         Count++;
-    }else if(val == 10 || val == 11){
+    } else if(val == 10 || val == 11){
         Count--;
     }
 }
@@ -38,13 +38,17 @@ bool AIPlayer::shouldHit(){
 }
 
 int AIPlayer::makeBet() const {
-    if (runningCount >= 3 && chips >= 50) {
+    
+    if (Count >= 3 && getChips() >= 50) {
         return 50;
     }
-    else if (chips >= 25) {
+    else if (getChips() >= 25) {
         return 25;
     }
     else {
-        return chips;
+        return getChips();
     }
+
+    return -1;
+
 }

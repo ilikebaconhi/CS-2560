@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Player::Player(string playerName = "Player", int startingChips = 100) {
+Player::Player(string playerName, int startingChips) {
     name = playerName;
     chips = startingChips;
 }
@@ -39,7 +39,7 @@ int Player::getCurrentBet() const {
     return currentBet;
 }
 
-int Player::getHandValue() const{
+int Player::getHandValue() {
     return hand.totalValue();
 }
 
