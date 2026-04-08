@@ -39,6 +39,10 @@ int Player::getCurrentBet() const {
     return currentBet;
 }
 
+int Player::getHandValue() const{
+    return hand.totalValue();
+}
+
 string Player::getName() const {
     return name;
 }
