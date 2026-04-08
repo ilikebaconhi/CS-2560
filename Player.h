@@ -25,6 +25,7 @@ class Player{
         int getChips() const;
         int getCurrentBet() const;
         string getName() const;
+        int getHandValue() const;
 
         void printHand();
 
