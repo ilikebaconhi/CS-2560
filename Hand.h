@@ -18,6 +18,7 @@ class Hand{
         void addCard(Deck& temp);
         int totalValue();
         void printHand();
+        void clearHand();
         Card getCard(int pos);
 
 

@@ -47,6 +47,13 @@ int Hand::totalValue() {
     return total;
 }
 
+void Hand::clearHand() {
+    currentPosition = -1;
+    acePosition = -1;
+    isAce = false;
+    cards.clear();
+}
+
 void Hand::printHand() {
     int num = totalValue();
 

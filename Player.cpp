@@ -9,14 +9,9 @@ Player::Player(string playerName, int startingChips) {
     chips = startingChips;
 }
 
-bool Player::placeBet(int amount) {
-    if (amount > chips || amount < 0) {
-        return false;
-    }
-
+void Player::placeBet(int amount) {
     currentBet = amount;
     chips -= currentBet;
-    return true;
 }
 
 void Player::winBet() {

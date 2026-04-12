@@ -17,7 +17,7 @@ class Player{
 
     public: 
         Player(string playerName = "Player", int startingChips = 100);
-        bool placeBet(int amount);
+        void placeBet(int amount);
         void winBet();
         void loseBet();
         void pushBet();
