@@ -1,11 +1,15 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 #include "Deck.h"
 #include "Card.h"
 using namespace std;  
 
 Deck::Deck() {
+    srand(time(0));
+
     nextCard = -1;
 
     string face = "";
@@ -85,12 +89,14 @@ Deck::Deck() {
 }
 
 Card Deck::getCard(){
-    nextCard++;
-    return deck[nextCard];
+    nextCard = rand() % 26;
+    Card randomCard = deck[nextCard];
+    deck.erase(deck.begin() + nextCard);
+    return randomCard;
+
 }
 
 void Deck::shuffle(){
-    srand(time(0));
 
     for(int i = 0; i < deck.size(); i++){
         int r = rand() % deck.size();

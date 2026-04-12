@@ -25,7 +25,7 @@ void Hand::addCard(Deck& temp) {
 
     if (isAce && totalValue() > 21) {
         cards[acePosition].setValue(1);
-    }
+    }      
 }
 
 int Hand::totalValue() {
