@@ -20,7 +20,7 @@ int main() {
   cout << "Welcome, please enter your name: ";
   cin >> playerName;
   Player user(playerName, 1000);
-  while(playAgain == "yes"){
+  while (playAgain == "yes") {
     Deck gameDeck;
     dealer.resetCount();
     A1.resetCount();
@@ -43,7 +43,7 @@ int main() {
     A1.observeCard(c2);
     A2.observeCard(c2);
     dealer.observeCard(c2);
-    if(user.getHandValue() == 21){
+    if (user.getHandValue() == 21) {
       blackJack = true;
     }
     cout << "Your hand is: " << endl;
@@ -51,23 +51,22 @@ int main() {
     cout << "Do you want to stand or hit?" << endl;
     cout << endl;
     cin >> drawAnswer;
-    while(drawAnswer == "hit"){
+    while (drawAnswer == "hit") {
       user.addCard(gameDeck);
       cout << "Your hand is: " << endl;
       user.printHand();
       int handVal = user.getHandValue();
-      if(handVal > 21){
+      if (handVal > 21) {
         cout << "<Bust!>" << endl;
         user.loseBet();
         youLose = true;
         break;
-      }else{
+      } else {
         cout << "Do you want to stand or hit?" << endl;
-        cout << endl;
         cin >> drawAnswer;
       }
     }
-    if(!youLose){
+    if (!youLose) {
       cout << "Your turn has ended, it is now " << A1.getName() << "'s turn" << endl;
       A1.makeBet();
       Card c3 = A1.addCard(gameDeck);
@@ -76,14 +75,12 @@ int main() {
       Card c4 = A1.addCard(gameDeck);
       dealer.observeCard(c4);
       A2.observeCard(c4);
-      while(A1.shouldHit()){
+      while (A1.shouldHit()) {
         cout << A1.getName() << " hits" << endl;
         Card temp = A1.addCard(gameDeck);
         A1.observeCard(temp);
         A1.printHand();
       }  
-      
-      
     }
     
     
@@ -94,4 +91,3 @@ int main() {
   
   }
 }
-
