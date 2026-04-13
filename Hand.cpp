@@ -28,6 +28,10 @@ void Hand::addCard(Deck& temp) {
     }
 }
 
+void Hand::addSpecificCard(Card card) {
+    cards.push_back(card);
+}
+
 int Hand::totalValue() {
     int total = 0;
     int aceCount = 0;
