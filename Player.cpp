@@ -52,7 +52,9 @@ void Player::printHand() {
 }
 
 void Player::addCard(Deck& deck) {
-    hand.addCard(deck);
+    Card drawn = deck.getCard();
+    hand.addSpecificCard(drawn);
+    return drawn;
 }
 
 void Player::clearHand() {
