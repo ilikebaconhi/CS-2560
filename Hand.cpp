@@ -58,6 +58,7 @@ void Hand::printHand() {
     for (int i = 0; i < cards.size(); i++) {
         Card temp = cards[i];
         temp.printCard();
+        cout << endl;
     }
 
     cout << "<" << num << " points>" << endl;
