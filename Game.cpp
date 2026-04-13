@@ -35,11 +35,11 @@ int main() {
     cout << "How many chips would you like to wager?" << endl;
     cin >> wagerAmount;
     user.placeBet(wagerAmount);
-    Card c1 = user.drawCard(gameDeck);
+    Card c1 = user.addCard(gameDeck);
     dealer.observeCard(c1);
     A1.observeCard(c1);
     A2.observeCard(c1);
-    Card c2 = user.drawCard(gameDeck);
+    Card c2 = user.addCard(gameDeck);
     A1.observeCard(c2);
     A2.observeCard(c2);
     dealer.observeCard(c2);
@@ -70,15 +70,15 @@ int main() {
     if(!youLose){
       cout << "Your turn has ended, it is now " << A1.getName() << "'s turn" << endl;
       A1.makeBet();
-      Card c3 = A1.drawCard(gameDeck);
+      Card c3 = A1.addCard(gameDeck);
       dealer.observeCard(c3);
       A2.observeCard(c3);
-      Card c4 = A1.drawCard(gameDeck);
+      Card c4 = A1.addCard(gameDeck);
       dealer.observeCard(c4);
       A2.observeCard(c4);
       while(A1.shouldHit()){
         cout << A1.getName() << " hits" << endl;
-        Card temp = A1.drawCard(gameDeck);
+        Card temp = A1.addCard(gameDeck);
         A1.observeCard(temp);
         A1.printHand();
       }  
