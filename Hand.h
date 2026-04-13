@@ -16,6 +16,7 @@ class Hand{
     public:
         Hand();
         void addCard(Deck& temp);
+        void addSpecificCard(Card card);
         int totalValue();
         void printHand();
         Card getCard(int pos);
