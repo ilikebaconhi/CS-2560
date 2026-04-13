@@ -52,6 +52,7 @@ int Hand::totalValue() {
 }
 
 void Hand::printHand() {
+    cout << "The hand is now:" << endl
     int num = totalValue();
 
     for (int i = 0; i < cards.size(); i++) {
