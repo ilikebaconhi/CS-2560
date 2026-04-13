@@ -25,21 +25,21 @@ void initializeGame(Player& user, Hand& userHand, Deck& gameDeck, int& wagerAmou
 }
 
 int main() {
-  string playAgain = "yes";
-  string playerName;
-  string drawAnswer;
-  Deck gameDeck;
-  Hand playerHand;
-  int wagerAmount;
-  int gamesPlayed = 0;
-  AIPlayer dealer("Dealer", 1000);
-  AIPlayer A1("Joe", 1000);
-  AIPlayer A2("Bobby", 1000);
-  cout << "Welcome, please enter your name: ";
-  cin >> playerName;
-  Player user(playerName, 1000);
+    string playAgain = "yes";
+    string playerName;
+    string drawAnswer;
+    Deck gameDeck;
+    Hand playerHand;
+    int wagerAmount;
+    int gamesPlayed = 0;
+    AIPlayer dealer("Dealer", 1000);
+    AIPlayer A1("Joe", 1000);
+    AIPlayer A2("Bobby", 1000);
+    cout << "Welcome, please enter your name: ";
+    cin >> playerName;
+    Player user(playerName, 1000);
 
-  initializeGame(user, playerHand, gameDeck, wagerAmount);
+    initializeGame(user, playerHand, gameDeck, wagerAmount);
     while (playAgain == "yes") {
         Hand opponentHand;
         bool blackJack = false;
@@ -54,8 +54,7 @@ int main() {
             cout << "Blackjack! You win!" << endl;
             user.winBet();
             playerHand.clearHand();
-        } 
-        else {
+        } else {
             while (true) {
                 cout << "Would you like to hit or stand? ";
                 cin >> drawAnswer;
