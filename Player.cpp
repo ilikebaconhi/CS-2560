@@ -51,7 +51,7 @@ void Player::printHand() {
     hand.printHand();
 }
 
-void Player::drawCard(Deck& deck) {
+void Player::addCard(Deck& deck) {
     hand.addCard(deck);
 }
 
