@@ -27,6 +27,7 @@ class Player{
         string getName() const;
         int getHandValue();
         void drawCard(Deck& deck);
+        void clearHand();
 
         void printHand();
 
