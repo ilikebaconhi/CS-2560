@@ -26,7 +26,7 @@ class Player{
         int getCurrentBet() const;
         string getName() const;
         int getHandValue();
-        void addCard(Deck& deck);
+        Card addCard(Deck& deck);
         void clearHand();
 
         void printHand();
