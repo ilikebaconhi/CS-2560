@@ -9,6 +9,9 @@
 using namespace std;
 
 void initializeGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AIPlayer& dealer, int& wagerAmount) {
+    vector<Player*> players = { &user, &A1, &A2, &dealer };
+    vector<AIPlayer*> AIPlayers = { &A1, &A2, &dealer };
+
     dealer.resetCount();
     A1.resetCount();
     A2.resetCount();
@@ -28,33 +31,37 @@ void initializeGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AI
     A1.observeCard(c2);
     A2.observeCard(c2);
     dealer.observeCard(c2);
+    cout << "Your hand is: " << endl;
+    user.printHand();
 }
 
 int main() {
-  string playAgain = "yes";
-  string playerName;
-  string drawAnswer;
-  int wagerAmount;
-  int gamesPlayed = 0;
-  AIPlayer dealer("Dealer", 1000);
-  AIPlayer A1("Joe", 1000);
-  AIPlayer A2("Bobby", 1000);
-  cout << "Welcome, please enter your name: ";
-  cin >> playerName;
-  Player user(playerName, 1000);
-  while (playAgain == "yes") {
+    string playAgain = "yes";
+    string playerName;
+    string drawAnswer;
+    int wagerAmount;
     Deck gameDeck;
-    bool blackJack = false;
-    bool youLose = false;
+
+    int gamesPlayed = 0;
+    AIPlayer dealer("Dealer", 1000);
+    AIPlayer A1("Joe", 1000);
+    AIPlayer A2("Bobby", 1000);
+    cout << "Welcome, please enter your name: ";
+    cin >> playerName;
+    Player user(playerName, 1000);
     initializeGame(gameDeck, user, A1, A2, dealer, wagerAmount);
-    if (user.getHandValue() == 21) {
-        blackJack = true;
-    }
-    cout << "Your hand is: " << endl;
-    user.printHand();
     cout << "Do you want to stand or hit?" << endl;
     cin >> drawAnswer;
-    while (drawAnswer == "hit") {
+  while (playAgain == "yes") {
+    bool blackJack = false;
+    bool youLose = false;
+    bool AI1Lose = false;
+    if (user.getHandValue() == 21) {
+        blackJack = true;
+        break;
+    }
+
+    if (drawAnswer == "hit") {
       user.addCard(gameDeck);
       cout << "Your hand is: " << endl;
       user.printHand();
@@ -71,9 +78,7 @@ int main() {
         cout << "Do you want to stand or hit?" << endl;
         cin >> drawAnswer;
       }
-    }
-
-    if (drawAnswer == "stand" || !youLose) {
+    } else if (drawAnswer == "stand") {
       cout << "Your turn has ended, it is now " << A1.getName() << "'s turn" << endl;
       A1.makeBet();
       Card c3 = A1.addCard(gameDeck);
@@ -82,21 +87,35 @@ int main() {
       Card c4 = A1.addCard(gameDeck);
       dealer.observeCard(c4);
       A2.observeCard(c4);
-      while (A1.shouldHit()) {
-        cout << A1.getName() << " hits" << endl;
-        Card temp = A1.addCard(gameDeck);
-        A1.observeCard(temp);
-        cout << A1.getName() << "'s hand is: " << endl;
-        A1.printHand();
-      }  
+      if (!A1.shouldHit()) {
+        cout << A1.getName() << " stands" << endl;
+      } else {
+        while (A1.shouldHit() && !AI1Lose) {
+            cout << A1.getName() << " hits" << endl;
+            Card temp = A1.addCard(gameDeck);
+            A1.observeCard(temp);
+            cout << A1.getName() << "'s hand is: " << endl;
+            A1.printHand();
+            if (A1.getHandValue() > 21) {
+                cout << A1.getName() << " <Bust!>" << endl;
+                AI1Lose = true;
+                break;
+            } else if (A1.getHandValue() == 21) {
+                cout << A1.getName() << " wins!";
+                blackJack = true;
+                break;
+            }
+        }  
+      }
+    }
 
+    cout << "Do you want to stand or hit?" << endl;
+    cin >> drawAnswer;
+
+    if (blackJack) {
+    break;
     }
     
-    
-    
-  
-  
-  
-  
   }
+    
 }
