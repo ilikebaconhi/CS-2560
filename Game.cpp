@@ -22,29 +22,40 @@ int main() {
   Player user(playerName, 1000);
   while(playAgain == "yes"){
     Deck gameDeck;
-    Hand playerHand;
-    Hand opponentHand;
-    boolean blackJack = false;
-    boolean youLose = false;
+    dealer.resetCount();
+    A1.resetCount();
+    A2.resetCount();
+    user.clearHand();
+    dealer.clearHand();
+    A1.clearHand();
+    A2.clearHand();
+    bool blackJack = false;
+    bool youLose = false;
     cout << "Welcome to the BlackJack Table." << endl;
     cout << "How many chips would you like to wager?" << endl;
     cin >> wagerAmount;
     user.placeBet(wagerAmount);
-    playerHand.addCard(gameDeck);
-    playerHand.addCard(gameDeck);
-    if(playerHand.totalValue() == ){
+    Card c1 = user.drawCard(gameDeck);
+    dealer.observeCard(c1);
+    A1.observeCard(c1);
+    A2.observeCard(c1);
+    Card c2 = user.drawCard(gameDeck);
+    A1.observeCard(c2);
+    A2.observeCard(c2);
+    dealer.observeCard(c2);
+    if(user.getHandValue() == 21){
       blackJack = true;
     }
     cout << "Your hand is: " << endl;
-    playerHand.printHand();
+    user.printHand();
     cout << "Do you want to stand or hit?" << endl;
     cout << endl;
     cin >> drawAnswer;
     while(drawAnswer == "hit"){
-      playerHand.addCard(gameDeck);
+      user.addCard(gameDeck);
       cout << "Your hand is: " << endl;
-      playerHand.printHand();
-      int handVal = playerHand.totalValue();
+      user.printHand();
+      int handVal = user.getHandValue();
       if(handVal > 21){
         cout << "<Bust!>" << endl;
         user.loseBet();
@@ -56,6 +67,26 @@ int main() {
         cin >> drawAnswer;
       }
     }
+    if(!youLose){
+      cout << "Your turn has ended, it is now " << A1.getName() << "'s turn" << endl;
+      A1.makeBet();
+      Card c3 = A1.drawCard(gameDeck);
+      dealer.observeCard(c3);
+      A2.observeCard(c3);
+      Card c4 = A1.drawCard(gameDeck);
+      dealer.observeCard(c4);
+      A2.observeCard(c4);
+      while(A1.shouldHit()){
+        cout << A1.getName() << " hits" << endl;
+        Card temp = A1.drawCard(gameDeck);
+        A1.observeCard(temp);
+        A1.printHand();
+      }  
+      
+      
+    }
+    
+    
     
   
   
