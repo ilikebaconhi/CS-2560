@@ -50,3 +50,7 @@ string Player::getName() const {
 void Player::printHand() {
     hand.printHand();
 }
+
+void Player::drawCard(Deck& deck) {
+    hand.addCard(deck);
+}
