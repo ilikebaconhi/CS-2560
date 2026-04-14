@@ -2,8 +2,7 @@
 
 ## Brief Description
 
-<!-- Provide a short overview of what the program does -->
-
+This is a simple command-line Blackjack game written in C++. You play against a dealer along with a few AI players. The game handles dealing cards, calculating hand values, and basic gameplay flow. The AI players also keep track of cards that have been played to get a rough idea of how good the deck is, which influences their decisions.
 ---
 
 ## How to Compile and Run
