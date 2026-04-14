@@ -9,8 +9,8 @@
 using namespace std;
 
 void initializeGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AIPlayer& dealer, int& wagerAmount) {
-    vector<Player*> players = { &user, &A1, &A2, &dealer };
-    vector<AIPlayer*> AIPlayers = { &A1, &A2, &dealer };
+    vector<Player*> players = { &user, &A1, &A2};
+    vector<AIPlayer*> AIPlayers = {&A1, &A2};
 
     dealer.resetCount();
     A1.resetCount();
@@ -20,19 +20,89 @@ void initializeGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AI
     A1.clearHand();
     A2.clearHand();
     cout << "Welcome to the BlackJack Table." << endl;
+    cout << "Other players at the table: "
+        << A1.getName() << " and " << A2.getName() << "." << endl;
     cout << "How many chips would you like to wager? You currently have " << user.getChips() << " chips." << endl;
     cin >> wagerAmount;
+
+    while (wagerAmount > user.getChips() || wagerAmount < 0) {
+        cout << "Invalid Number of chips (You don't have that many or you tried to bet negative chips)" << endl;
+        cout << endl;
+        cout << "How many chips would you like to wager? You currently have " << user.getChips() << " chips." << endl;
+        cin >> wagerAmount;
+    }
     user.placeBet(wagerAmount);
-    Card c1 = user.addCard(gameDeck);
-    dealer.observeCard(c1);
+    cout << A1.getName() << " has " << A1.getChips() << " chips." << endl;
+    cout << A1.getName() << " bets " << A1.makeBet() << " chips." << endl;
+    cout << A2.getName() << " has " << A1.getChips() << " chips." << endl;
+    cout << A2.getName() << " bets " << A2.makeBet() << " chips." << endl;
+
+    for(int round = 0; round < 2; round++){
+        for(Player* current : players){
+            Card c = current->addCard(gameDeck);
+            dealer.observeCard(c);
+
+            for(AIPlayer* ai : AIPlayers){
+                // AI should NOT observe its own card
+                if(ai != current){
+                    ai->observeCard(c);
+                }
+            }
+        }
+    }
+
+    //dealer has a hidden card
+    Card c1 = dealer.addCard(gameDeck);
     A1.observeCard(c1);
     A2.observeCard(c1);
-    Card c2 = user.addCard(gameDeck);
-    A1.observeCard(c2);
-    A2.observeCard(c2);
-    dealer.observeCard(c2);
+    //hole card
+    Card c2 = dealer.addCard(gameDeck);
+    cout << endl;
     cout << "Your hand is: " << endl;
     user.printHand();
+}
+
+void playAITurns(vector<AIPlayer*>& AIPlayers, Deck& gameDeck, bool youLose) {
+    bool blackJack = false;
+    for (int i=0; i < AIPlayers.size(); i++) {
+        AIPlayer* currentPlayer = AIPlayers.at(i);
+        if (i == 0 && !youLose) {
+            cout << "Your turn has ended, it is now " << currentPlayer->getName() << "'s turn" << endl;
+        } else {
+            cout << endl;
+            cout << AIPlayers.at((i - 1 + AIPlayers.size()) % AIPlayers.size())->getName() << "'s turn has ended, it is now " << currentPlayer->getName() << "'s turn" << endl;
+        }
+
+        cout << currentPlayer->getName() << "'s hand is: " << endl;
+        currentPlayer->printHand();
+        if (!currentPlayer->shouldHit()) {
+            cout << currentPlayer->getName() << " stands" << endl;
+            cout << endl;
+        } else {
+            while (currentPlayer->shouldHit() && currentPlayer->getHandValue() < 21) {
+                cout << currentPlayer->getName() << " hits" << endl;
+                cout << endl;
+                Card temp = currentPlayer->addCard(gameDeck);
+                currentPlayer->observeCard(temp);
+                cout << currentPlayer->getName() << "'s hand is: " << endl;
+                currentPlayer->printHand();
+                cout << endl;
+                if (currentPlayer->getHandValue() > 21) {
+                    cout << currentPlayer->getName() << " <Bust!>" << endl;
+                    AIPlayers.erase(AIPlayers.begin() + i);
+                } else if (currentPlayer->getHandValue() == 21) {
+                    cout << currentPlayer->getName() << " wins!";
+                    blackJack = true;
+                    return;
+                }
+            }  
+            
+            if (currentPlayer->getHandValue() < 21) {
+                cout << currentPlayer->getName() << " stands" << endl;
+            }
+            
+        }
+    }
 }
 
 int main() {
@@ -46,23 +116,30 @@ int main() {
     AIPlayer dealer("Dealer", 1000);
     AIPlayer A1("Joe", 1000);
     AIPlayer A2("Bobby", 1000);
+    bool youLose = false;
+    vector<AIPlayer*> AIPlayers = {&A1, &A2};
+
     cout << "Welcome, please enter your name: ";
     cin >> playerName;
     Player user(playerName, 1000);
     initializeGame(gameDeck, user, A1, A2, dealer, wagerAmount);
-    cout << "Do you want to stand or hit?" << endl;
-    cin >> drawAnswer;
+
   while (playAgain == "yes") {
     bool blackJack = false;
-    bool youLose = false;
-    bool AI1Lose = false;
     if (user.getHandValue() == 21) {
         blackJack = true;
         break;
     }
+    if (!youLose) {
+        cout << "Do you want to stand or hit?" << endl;
+        cin >> drawAnswer;
+    } else {
+        playAITurns(AIPlayers, gameDeck, youLose);
+    }
 
     if (drawAnswer == "hit") {
       user.addCard(gameDeck);
+      cout << endl;
       cout << "Your hand is: " << endl;
       user.printHand();
 
@@ -70,52 +147,29 @@ int main() {
       if (handVal > 21) {
         cout << "<Bust!>" << endl;
         youLose = true;
-        break;
-      } else if (user.getHandValue() == 21) {
+        drawAnswer = "stand";
+      } else if (handVal == 21) {
         cout << "You win!";
         blackJack = true;
-      } else {
-        cout << "Do you want to stand or hit?" << endl;
-        cin >> drawAnswer;
       }
     } else if (drawAnswer == "stand") {
-      cout << "Your turn has ended, it is now " << A1.getName() << "'s turn" << endl;
-      A1.makeBet();
-      Card c3 = A1.addCard(gameDeck);
-      dealer.observeCard(c3);
-      A2.observeCard(c3);
-      Card c4 = A1.addCard(gameDeck);
-      dealer.observeCard(c4);
-      A2.observeCard(c4);
-      if (!A1.shouldHit()) {
-        cout << A1.getName() << " stands" << endl;
-      } else {
-        while (A1.shouldHit() && !AI1Lose) {
-            cout << A1.getName() << " hits" << endl;
-            Card temp = A1.addCard(gameDeck);
-            A1.observeCard(temp);
-            cout << A1.getName() << "'s hand is: " << endl;
-            A1.printHand();
-            if (A1.getHandValue() > 21) {
-                cout << A1.getName() << " <Bust!>" << endl;
-                AI1Lose = true;
-                break;
-            } else if (A1.getHandValue() == 21) {
-                cout << A1.getName() << " wins!";
-                blackJack = true;
-                break;
-            }
-        }  
-      }
+        cout << endl;
+        playAITurns(AIPlayers, gameDeck, youLose);
+    } else {
+        cout << "Invalid input. Type 'hit' to draw a card or 'stand' to hold: ";    
     }
 
-    cout << "Do you want to stand or hit?" << endl;
-    cin >> drawAnswer;
 
-    if (blackJack) {
-    break;
+    for (AIPlayer* Player : AIPlayers) {
+        if (Player->getHandValue() == 21) {
+            cout << Player->getName() << " got blackjack!. They win!";
+            youLose = true;
+            Player->winBet();
+            break;
+        }
     }
     
+    //fix the problem where everybody stands it results in an infinite loop
   }
     
 }
