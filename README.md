@@ -40,20 +40,25 @@
 
 ### Classes
 
-#### ClassName1
+#### AIPlayer
 
 * <!-- Describe purpose and responsibilities -->
 
-#### ClassName2
+#### Card
 
 * <!-- Describe purpose and responsibilities -->
 
-#### ClassName3
+#### Deck
 
 * <!-- Describe purpose and responsibilities -->
 
-<!-- Add more classes as needed -->
+#### Hand
 
+* <!-- Describe purpose and responsibilities -->
+
+#### Player
+
+* <!-- Describe purpose and responsibilities -->
 ---
 
 ## Additional Notes
