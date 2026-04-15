@@ -137,7 +137,8 @@ int main() {
                 cout << A1.getName() << " <Bust!>" << endl;
                 AI1Lose = true;
             }
-        }  
+        }
+        cout << A1.getName() << " stands" << endl;  
       }
 
       cout << A1.getName() <<"'s turn has ended, it is now " << A2.getName() << "'s turn" << endl;
@@ -166,7 +167,8 @@ int main() {
                 cout << A2.getName() << " <Bust!>" << endl;
                 AI2Lose = true;
             }
-        }  
+        }
+        cout << A2.getName() << " stands" << endl;  
       }
 
       cout << A2.getName() <<"'s turn has ended, it is now " << dealer.getName() << "'s turn" << endl;
@@ -193,7 +195,8 @@ int main() {
                 cout << dealer.getName() << " <Bust!>" << endl;
                 DealerLose = true;
             }
-        }  
+        }
+        cout << dealer.getName() << " stands" << endl;  
       }
 
 
