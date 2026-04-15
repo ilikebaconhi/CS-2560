@@ -43,6 +43,55 @@ void resolvePlayer(Player& p, AIPlayer& dealer, bool playerLose) {
 
 }
 
+void playAITurn(AIPlayer& ai, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2, bool& aiLose, bool isDealer = false) {
+
+    cout << ai.getName() << "'s turn has started" << endl;
+
+    if (!isDealer) {
+        int bet = ai.makeBet();
+        ai.placeBet(bet);
+    }
+
+    Card temp = ai.addCard(deck);
+    dealer.observeCard(temp);
+    A1.observeCard(temp);
+    A2.observeCard(temp);
+
+    temp = ai.addCard(deck);
+    dealer.observeCard(temp);
+    A1.observeCard(temp);
+    A2.observeCard(temp);
+
+    cout << ai.getName() << "'s hand is: " << endl;
+    ai.printHand();
+
+    if (!ai.shouldHit()) {
+        cout << ai.getName() << " stands" << endl;
+        return;
+    }
+
+    while (ai.shouldHit() && !aiLose) {
+        cout << ai.getName() << " hits" << endl;
+
+        Card temp = ai.addCard(deck);
+        dealer.observeCard(temp);
+        A1.observeCard(temp);
+        A2.observeCard(temp);
+
+        cout << ai.getName() << "'s hand is: " << endl;
+        ai.printHand();
+
+        if (ai.getHandValue() > 21) {
+            cout << ai.getName() << " <Bust!>" << endl;
+            aiLose = true;
+            return;
+        }
+    }
+
+    cout << ai.getName() << " stands" << endl;
+}
+
+
 int main() {
     srand(time(0));
     string playAgain = "yes";
@@ -111,94 +160,9 @@ int main() {
         cin >> drawAnswer;
       }
     }
-      cout << "Your turn has ended, it is now " << A1.getName() << "'s turn" << endl;
-      int bet = A1.makeBet();
-      A1.placeBet(bet);
-      temp = A1.addCard(gameDeck);
-      dealer.observeCard(temp);
-      A1.observeCard(temp);
-      A2.observeCard(temp);
-      temp = A1.addCard(gameDeck);
-      dealer.observeCard(temp);
-      A1.observeCard(temp);
-      A2.observeCard(temp);
-      cout << A1.getName() << "'s hand is: " << endl;
-      A1.printHand();
-      if (!A1.shouldHit()) {
-        cout << A1.getName() << " stands" << endl;
-      } else {
-        while (A1.shouldHit() && !AI1Lose) {
-            cout << A1.getName() << " hits" << endl;
-            Card temp = A1.addCard(gameDeck);
-            A1.observeCard(temp);
-            cout << A1.getName() << "'s hand is: " << endl;
-            A1.printHand();
-            if (A1.getHandValue() > 21) {
-                cout << A1.getName() << " <Bust!>" << endl;
-                AI1Lose = true;
-            }
-        }
-        cout << A1.getName() << " stands" << endl;  
-      }
-
-      cout << A1.getName() <<"'s turn has ended, it is now " << A2.getName() << "'s turn" << endl;
-      bet = A2.makeBet();
-      A2.placeBet(bet);
-      temp = A2.addCard(gameDeck);
-      dealer.observeCard(temp);
-      A1.observeCard(temp);
-      A2.observeCard(temp);
-      temp = A2.addCard(gameDeck);
-      dealer.observeCard(temp);
-      A1.observeCard(temp);
-      A2.observeCard(temp);
-      cout << A2.getName() << "'s hand is: " << endl;
-      A2.printHand();
-      if (!A2.shouldHit()) {
-        cout << A2.getName() << " stands" << endl;
-      } else {
-        while (A2.shouldHit() && !AI2Lose) {
-            cout << A2.getName() << " hits" << endl;
-            Card temp = A2.addCard(gameDeck);
-            A2.observeCard(temp);
-            cout << A2.getName() << "'s hand is: " << endl;
-            A2.printHand();
-            if (A2.getHandValue() > 21) {
-                cout << A2.getName() << " <Bust!>" << endl;
-                AI2Lose = true;
-            }
-        }
-        cout << A2.getName() << " stands" << endl;  
-      }
-
-      cout << A2.getName() <<"'s turn has ended, it is now " << dealer.getName() << "'s turn" << endl;
-      temp = dealer.addCard(gameDeck);
-      dealer.observeCard(temp);
-      A1.observeCard(temp);
-      A2.observeCard(temp);
-      temp = dealer.addCard(gameDeck);
-      dealer.observeCard(temp);
-      A1.observeCard(temp);
-      A2.observeCard(temp);
-      cout << dealer.getName() << "'s hand is: " << endl;
-      dealer.printHand();
-      if (!dealer.shouldHit()) {
-        cout << dealer.getName() << " stands" << endl;
-      } else {
-        while (dealer.shouldHit() && !DealerLose) {
-            cout << dealer.getName() << " hits" << endl;
-            Card temp = dealer.addCard(gameDeck);
-            dealer.observeCard(temp);
-            cout << dealer.getName() << "'s hand is: " << endl;
-            dealer.printHand();
-            if (dealer.getHandValue() > 21) {
-                cout << dealer.getName() << " <Bust!>" << endl;
-                DealerLose = true;
-            }
-        }
-        cout << dealer.getName() << " stands" << endl;  
-      }
-
+    playAITurn(A1, gameDeck, dealer, A1, A2, AI1Lose);
+    playAITurn(A2, gameDeck, dealer, A1, A2, AI2Lose);
+    playAITurn(dealer, gameDeck, dealer, A1, A2, DealerLose, true);
 
     
     int userChipsBefore = user.getChips();
