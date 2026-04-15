@@ -23,8 +23,13 @@ void initializeGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AI
     cout << "Welcome to the BlackJack Table." << endl;
     cout << "How many chips would you like to wager? You currently have " << user.getChips() << " chips." << endl;
     cin >> wagerAmount;
-    user.placeBet(wagerAmount);
-    
+    while (wagerAmount > user.getChips() || wagerAmount < 0) {
+        cout << "Invalid Number of chips (You don't have that many or you tried to bet negative chips)" << endl;
+        cout << endl;
+        cout << "How many chips would you like to wager? You currently have " << user.getChips() << " chips." << endl;
+        cin >> wagerAmount;
+    }
+    user.placeBet(wagerAmount);    
 }
 
 void resolvePlayer(Player& p, AIPlayer& dealer, bool playerLose) {
@@ -44,8 +49,9 @@ void resolvePlayer(Player& p, AIPlayer& dealer, bool playerLose) {
 }
 
 void playAITurn(AIPlayer& ai, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2, bool& aiLose, bool isDealer = false) {
-
+    cout << endl;
     cout << ai.getName() << "'s turn has started" << endl;
+    cout << endl;
 
     if (!isDealer) {
         int bet = ai.makeBet();
@@ -71,6 +77,7 @@ void playAITurn(AIPlayer& ai, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlay
     }
 
     while (ai.shouldHit() && !aiLose) {
+        cout << endl;
         cout << ai.getName() << " hits" << endl;
 
         Card temp = ai.addCard(deck);
@@ -78,6 +85,7 @@ void playAITurn(AIPlayer& ai, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlay
         A1.observeCard(temp);
         A2.observeCard(temp);
 
+        cout << endl;
         cout << ai.getName() << "'s hand is: " << endl;
         ai.printHand();
 
@@ -140,7 +148,7 @@ int main() {
 
     continue;
     }
-    cout << "Do you want to stand or hit? ";
+    cout << "\nDo you want to stand or hit? ";
     cin >> drawAnswer;
     while (drawAnswer == "hit") {
       temp = user.addCard(gameDeck);
@@ -156,10 +164,11 @@ int main() {
         youLose = true;
         break;
       } else {
-        cout << "Do you want to stand or hit? ";
+        cout << "\nDo you want to stand or hit? ";
         cin >> drawAnswer;
       }
     }
+
     playAITurn(A1, gameDeck, dealer, A1, A2, AI1Lose);
     playAITurn(A2, gameDeck, dealer, A1, A2, AI2Lose);
     playAITurn(dealer, gameDeck, dealer, A1, A2, DealerLose, true);
