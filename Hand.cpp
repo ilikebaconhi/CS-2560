@@ -25,7 +25,11 @@ void Hand::addCard(Deck& temp) {
 
     if (isAce && totalValue() > 21) {
         cards[acePosition].setValue(1);
-    }      
+    }
+}
+
+void Hand::addSpecificCard(Card card) {
+    cards.push_back(card);
 }
 
 int Hand::totalValue() {
@@ -47,19 +51,13 @@ int Hand::totalValue() {
     return total;
 }
 
-void Hand::clearHand() {
-    currentPosition = -1;
-    acePosition = -1;
-    isAce = false;
-    cards.clear();
-}
-
 void Hand::printHand() {
     int num = totalValue();
 
     for (int i = 0; i < cards.size(); i++) {
         Card temp = cards[i];
         temp.printCard();
+        cout << endl;
     }
 
     cout << "<" << num << " points>" << endl;

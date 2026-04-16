@@ -9,9 +9,14 @@ Player::Player(string playerName, int startingChips) {
     chips = startingChips;
 }
 
-void Player::placeBet(int amount) {
+bool Player::placeBet(int amount) {
+    if (amount > chips || amount < 0) {
+        return false;
+    }
+
     currentBet = amount;
     chips -= currentBet;
+    return true;
 }
 
 void Player::winBet() {
@@ -44,4 +49,14 @@ string Player::getName() const {
 
 void Player::printHand() {
     hand.printHand();
+}
+
+Card Player::addCard(Deck& deck) {
+    Card drawn = deck.getCard();
+    hand.addSpecificCard(drawn);
+    return drawn;
+}
+
+void Player::clearHand() {
+    hand = Hand();
 }

@@ -17,7 +17,7 @@ class Player{
 
     public: 
         Player(string playerName = "Player", int startingChips = 100);
-        void placeBet(int amount);
+        bool placeBet(int amount);
         void winBet();
         void loseBet();
         void pushBet();
@@ -26,6 +26,8 @@ class Player{
         int getCurrentBet() const;
         string getName() const;
         int getHandValue();
+        Card addCard(Deck& deck);
+        void clearHand();
 
         void printHand();
 
