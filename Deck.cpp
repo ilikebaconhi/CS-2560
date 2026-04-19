@@ -89,7 +89,7 @@ Deck::Deck() {
 }
 
 Card Deck::getCard(){
-    nextCard = rand() % 26;
+    nextCard = rand() % deck.size();
     Card randomCard = deck[nextCard];
     deck.erase(deck.begin() + nextCard);
     return randomCard;
