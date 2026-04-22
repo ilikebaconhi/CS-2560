@@ -64,8 +64,8 @@ The program is organized into several classes and helper functions to separate g
   - `Hand` stores a player’s cards and calculates hand values.
 
 - **Player / AIPlayer**
-  - `Player` handles user-related actions such as betting, drawing cards, and tracking chips.
-  - `AIPlayer` extends player behavior with automated decision-making (hit/stand and betting strategy).
+  - `Player` handles user actions such as betting, drawing cards, and tracking chips.
+  - `AIPlayer` extends the Player class's behavior with automated decision-making (hit/stand and betting strategy).
 
 - **Game Flow (main.cpp)**
   - Controls the overall game loop (rounds, replay, and termination).
