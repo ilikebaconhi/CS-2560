@@ -39,29 +39,30 @@ void setupGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AIPlaye
     cout << endl;
     cout << "Welcome to the BlackJack Table." << endl;
     cout << "The other players at the table are "  << A1.getName() << ", " << A2.getName() << ", and the dealer." << endl;
-    cout << "How many chips would you like to wager? You currently have "
-         << user.getChips() << " chips. The minimum bet is 5." << endl;
 
-    // fix error checking later...
-    while (!(cin >> wagerAmount)) {
-        cout << "Error: Not a number." << endl;
-        cin.clear(); // reset failbit
-        cin.ignore(1000, '\n'); // skip bad input
+
+    while (true) {
         cout << "How many chips would you like to wager? You currently have "
          << user.getChips() << " chips. The minimum bet is 5." << endl;
-    }
+         
+        if (!(cin >> wagerAmount)) {
+            cout << "Error: Invalid number." << endl;
+            cin.clear();
+            cin.ignore(1000, '\n');
+            continue;
+        }
 
-    while (wagerAmount > user.getChips() || wagerAmount < 0) {
-        cout << "Invalid Number of chips (You don't have that many or you tried to bet negative chips)" << endl;
-        cout << endl;
-        cout << "How many chips would you like to wager? You currently have "
-            << user.getChips() << " chips." << endl;
-    }  
+        if (wagerAmount < 0 || wagerAmount > user.getChips()) {
+            cout << "Invalid number of chips." << endl;
+            continue;
+        }
 
-    if (wagerAmount < 5) {
-        wagerAmount = 5;
+        if (wagerAmount < 5) {
+            wagerAmount = 5;
+        }
+
+        break;
     }
-    
     user.placeBet(wagerAmount);
     gameDeck.shuffle();
     dealCardToUser(user, gameDeck, dealer, A1, A2);
