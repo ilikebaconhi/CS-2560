@@ -42,22 +42,21 @@ void setupGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AIPlaye
     cout << "How many chips would you like to wager? You currently have "
          << user.getChips() << " chips. The minimum bet is 5." << endl;
 
+    // fix error checking later...
     while (!(cin >> wagerAmount)) {
         cout << "Error: Not a number." << endl;
         cin.clear(); // reset failbit
         cin.ignore(1000, '\n'); // skip bad input
         cout << "How many chips would you like to wager? You currently have "
          << user.getChips() << " chips. The minimum bet is 5." << endl;
-        cin >> wagerAmount;
     }
 
     while (wagerAmount > user.getChips() || wagerAmount < 0) {
         cout << "Invalid Number of chips (You don't have that many or you tried to bet negative chips)" << endl;
         cout << endl;
         cout << "How many chips would you like to wager? You currently have "
-             << user.getChips() << " chips." << endl;
-        cin >> wagerAmount;
-    }
+            << user.getChips() << " chips." << endl;
+    }  
 
     if (wagerAmount < 5) {
         wagerAmount = 5;
@@ -186,16 +185,14 @@ void printEndResults(bool youLose, Player& user, AIPlayer& dealer, int& gamesWon
     printResults(gamesWon, gamesPlayed, user.getChips(), playAgain);
 }
 
-void handlePlayerTurn(Player& user, Deck& gameDeck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2, int& gamesPlayed, int& gamesWon, string& playAgain, bool& youLose) {
+bool handlePlayerTurn(Player& user, Deck& gameDeck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2, int gamesPlayed, int& gamesWon, string& playAgain, bool& youLose) {
     string drawAnswer;
     if (user.getHandValue() == 21) {
         cout << "BlackJack, You win" << endl;
         user.winBlackJackBet();
         gamesWon++;
-        gamesPlayed++;
-
         printResults(gamesWon, gamesPlayed, user.getChips(), playAgain);
-        return;
+        return false;
     }
 
     cout << "\nDo you want to stand or hit? ";
@@ -225,6 +222,7 @@ void handlePlayerTurn(Player& user, Deck& gameDeck, AIPlayer& dealer, AIPlayer& 
             cin >> drawAnswer;
         }
     }
+    return true;
 }
 
 int main() {
@@ -253,7 +251,10 @@ int main() {
         bool AI2Lose = false;
         bool DealerLose = false;
 
-        handlePlayerTurn(user, gameDeck, dealer, A1, A2, gamesPlayed, gamesWon, playAgain, youLose);
+        bool continueRound = handlePlayerTurn(user, gameDeck, dealer, A1, A2, gamesPlayed, gamesWon, playAgain, youLose);
+        if (!continueRound) {
+            continue;
+        }
 
         playAITurn(A1, gameDeck, dealer, A1, A2, AI1Lose);
         playAITurn(A2, gameDeck, dealer, A1, A2, AI2Lose);
