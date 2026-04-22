@@ -53,7 +53,7 @@ g++ Game.cpp AIPlayer.cpp Card.cpp Deck.cpp Hand.cpp Player.cpp -o blackjack
 ### Game End
 
 - You can keep playing rounds until you run out of chips or choose to stop.
-- 
+
 ## Code Structure and Class Descriptions
 
 The program is organized into several classes and helper functions to separate game logic, player behavior, and game flow:
