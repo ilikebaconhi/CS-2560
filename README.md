@@ -11,7 +11,7 @@ This is a simple command-line Blackjack game written in C++. You play against a 
 ### Prerequisites
 
 - A C++ compiler such as `g++` (with support for standard libraries)
-- 
+
 ### Compilation
 
 ```bash
