@@ -17,8 +17,9 @@ class Player{
 
     public: 
         Player(string playerName = "Player", int startingChips = 100);
-        bool placeBet(int amount);
+        bool placeBet(int amount); // returns true if bet is successfully placed, false otherwise
         void winBet();
+        void winBlackJackBet(); //when the user gets blackjack in the first two cards drawn
         void loseBet();
         void pushBet();
 

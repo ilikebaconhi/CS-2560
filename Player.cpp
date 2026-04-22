@@ -23,6 +23,10 @@ void Player::winBet() {
     chips += (currentBet * 2);
 }
 
+void Player::winBlackJackBet() {
+    chips += currentBet * 2.5;
+}
+
 void Player::loseBet() {
     // do nothing
 }

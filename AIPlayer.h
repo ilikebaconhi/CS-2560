@@ -13,7 +13,6 @@ public:
     void resetCount();
     void observeCard(const Card& card);
     int getCount() const;
-
     bool shouldHit();
     int makeBet() const;
 };
