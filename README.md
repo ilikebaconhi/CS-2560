@@ -28,13 +28,13 @@ g++ Game.cpp AIPlayer.cpp Card.cpp Deck.cpp Hand.cpp Player.cpp -o blackjack
 
 ## Gameplay Instructions
 
-## Blackjack Rules
+### Blackjack Rules
 
 > "A blackjack game has a dealer and one or more players. Each player plays against the dealer. All players get two cards to begin and can ask for more until they bust (their total exceeds 21) or they stand (are happy with the total of their cards). Face cards count 10, ace may be 1 or 11. The dealer is dealt one card face up and one face down, and plays a fixed strategy: hit 16 or less, stand on 17 or more. The player loses if they bust, wins if they do not bust and the dealer does. Otherwise the player wins if her total is closer to 21 than the dealer's. No money changes hands in the case of ties. If the player's first two cards total 21, this is a blackjack and they win 1.5 times their bet (unless the dealer also has one and a tie results)."  
 > — [Duke University Blackjack Rules](https://sites.math.duke.edu/~rtd/MEC/prob/blackjack.html)
 ---
 
-## How to Play
+### How to Play
 
 1. Enter your name and place a bet (minimum 5 chips).
 2. You will be dealt two cards.
