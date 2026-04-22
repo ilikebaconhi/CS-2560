@@ -69,7 +69,7 @@ The program is organized into several classes and helper functions to separate g
 
 - **Game Flow (main.cpp)**
   - Controls the overall game loop (rounds, replay, and termination).
-  - Uses helper functions to keep logic modular:
+  - Uses the following helper functions:
     - `setupGame()` initializes each round (bets, shuffle, initial deal).
     - `handlePlayerTurn()` manages the user’s turn.
     - `playAITurn()` runs AI and dealer turns.
