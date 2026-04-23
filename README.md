@@ -1,8 +1,6 @@
 # BlackJack
 
-## Description  
-
-This is a simple command-line Blackjack game written in C++. You play against a dealer along with a few AI players. The game handles dealing cards, calculating hand values, and basic gameplay flow. The AI players also keep track of cards that have been played to get a rough idea of how good the deck is, which influences their decisions.
+This is a command-line Blackjack game written in C++. You play against a dealer along with a two AI players. The game handles dealing cards, calculating hand values, and basic gameplay flow. The AI players also keep track of cards that have been played to get a rough idea of how good the deck is, which influences their decisions.
 
 ---
 
@@ -55,7 +53,7 @@ g++ Game.cpp AIPlayer.cpp Card.cpp Deck.cpp Hand.cpp Player.cpp -o blackjack
 ### Game End
 
 - You can keep playing rounds until you run out of chips or choose to stop.
-- 
+
 ## Code Structure and Class Descriptions
 
 The program is organized into several classes and helper functions to separate game logic, player behavior, and game flow:
@@ -66,12 +64,12 @@ The program is organized into several classes and helper functions to separate g
   - `Hand` stores a player’s cards and calculates hand values.
 
 - **Player / AIPlayer**
-  - `Player` handles user-related actions such as betting, drawing cards, and tracking chips.
-  - `AIPlayer` extends player behavior with automated decision-making (hit/stand and betting strategy).
+  - `Player` handles user actions such as betting, drawing cards, and tracking chips.
+  - `AIPlayer` extends the Player class's behavior with automated decision-making (hit/stand and betting strategy).
 
 - **Game Flow (main.cpp)**
   - Controls the overall game loop (rounds, replay, and termination).
-  - Uses helper functions to keep logic modular:
+  - Uses the following helper functions:
     - `setupGame()` initializes each round (bets, shuffle, initial deal).
     - `handlePlayerTurn()` manages the user’s turn.
     - `playAITurn()` runs AI and dealer turns.
