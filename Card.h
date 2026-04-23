@@ -18,7 +18,7 @@ public:
     int getValue() const ;
 
     void setValue(int newVal);
-    void printCard();
+    void printCard() const;
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "Hand.h"
+#include "Card.h"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -7,6 +8,10 @@ Hand::Hand() {
     currentPosition = -1;
     acePosition = -1;
     isAce = false;
+}
+
+vector<Card> Hand::getAllCards() const {
+    return cards;
 }
 
 Card Hand::getCard(int pos){
@@ -32,7 +37,7 @@ void Hand::addSpecificCard(Card card) {
     cards.push_back(card);
 }
 
-int Hand::totalValue() {
+int Hand::totalValue() const{
     int total = 0;
     int aceCount = 0;
 

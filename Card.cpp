@@ -24,6 +24,6 @@ void Card::setValue(int newVal){
     value = newVal;
 }
 
-void Card::printCard(){
+void Card::printCard() const{
     cout << face << " of " << suite << " ";
 }

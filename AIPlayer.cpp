@@ -37,6 +37,35 @@ bool AIPlayer::shouldHit(){
     }
 }
 
+void AIPlayer::showDealerHand(bool revealAll) const {
+    const vector<Card>& cards = getHand().getAllCards();
+
+    int visibleTotal = 0;
+
+    cout << getName() << "'s hand:" << endl;
+
+    for (int i = 0; i < cards.size(); i++) {
+        if (!revealAll && i == 1) {
+            cout << "[Hidden]" << endl;
+            break;
+        }
+
+        int num = cards[i].getValue();
+        visibleTotal += num;
+
+        cards[i].printCard();
+        cout << "<" << num << " points>" << endl;
+    }
+
+    // print total
+    if (revealAll) {
+        cout << "Total: " << getHandValue() << endl;
+    } else {
+        cout << "Visible Total: " << visibleTotal << endl;
+    }
+}
+
+
 int AIPlayer::makeBet() const {
     
     if (Count >= 3 && getChips() >= 50) {

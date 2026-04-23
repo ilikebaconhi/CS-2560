@@ -35,6 +35,10 @@ void Player::pushBet() {
     chips += currentBet;
 }
 
+Hand Player::getHand() const{
+    return hand;
+}
+
 int Player::getChips() const {
     return chips;
 }
@@ -43,7 +47,7 @@ int Player::getCurrentBet() const {
     return currentBet;
 }
 
-int Player::getHandValue() {
+int Player::getHandValue() const{
     return hand.totalValue();
 }
 

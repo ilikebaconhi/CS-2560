@@ -6,10 +6,10 @@
 class AIPlayer : public Player{
 private:
     int Count;
-
+    
 public:
     AIPlayer(string playerName = "Dealer", int startingChips = 1000);
-
+    void showDealerHand(bool hideFirstCard) const;
     void resetCount();
     void observeCard(const Card& card);
     int getCount() const;

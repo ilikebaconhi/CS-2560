@@ -16,11 +16,11 @@ class Hand{
     public:
         Hand();
         void addCard(Deck& temp);
+        vector<Card> getAllCards() const;
         void addSpecificCard(Card card);
-        int totalValue();
+        int totalValue() const;
         void printHand();
         Card getCard(int pos);
-
 
 };
 

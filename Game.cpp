@@ -11,15 +11,40 @@
 #include <ctime>
 #include <cmath>
 #include <cstdlib>
+#include <vector>
 
 using namespace std;
 
-//reduces repetition in main
+// adds pausing to improve game flow
+void pause(int ms) {
+    this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+// reduces repetition in main
 void dealCardToUser(Player& user, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2) {
     Card newCard = user.addCard(deck);
     dealer.observeCard(newCard);
     A1.observeCard(newCard);
     A2.observeCard(newCard);
+}
+
+// deals a card to an AI player and lets the other AIs observe it if visible
+void dealCardToAI(AIPlayer& current, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2, bool visible = true) {
+    Card newCard = current.addCard(deck);
+
+    if (!visible) {
+        return;
+    }
+
+    if (&dealer != &current) {
+        dealer.observeCard(newCard);
+    }
+    if (&A1 != &current) {
+        A1.observeCard(newCard);
+    }
+    if (&A2 != &current) {
+        A2.observeCard(newCard);
+    }
 }
 
 void setupGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AIPlayer& dealer, int& gamesPlayed) {
@@ -36,15 +61,16 @@ void setupGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AIPlaye
     for (Player* player : players) {
         player->clearHand();
     }
+
     cout << endl;
     cout << "Welcome to the BlackJack Table." << endl;
-    cout << "The other players at the table are "  << A1.getName() << ", " << A2.getName() << ", and the dealer." << endl;
-
+    cout << "The other players at the table are "
+         << A1.getName() << ", " << A2.getName() << ", and the dealer." << endl;
 
     while (true) {
         cout << "How many chips would you like to wager? You currently have "
-         << user.getChips() << " chips. The minimum bet is 5." << endl;
-         
+             << user.getChips() << " chips. The minimum bet is 5." << endl;
+
         if (!(cin >> wagerAmount)) {
             cout << "Error: Invalid number." << endl;
             cin.clear();
@@ -63,12 +89,23 @@ void setupGame(Deck& gameDeck, Player& user, AIPlayer& A1, AIPlayer& A2, AIPlaye
 
         break;
     }
+
     user.placeBet(wagerAmount);
     gameDeck.shuffle();
+
+    // user initial hand
     dealCardToUser(user, gameDeck, dealer, A1, A2);
     dealCardToUser(user, gameDeck, dealer, A1, A2);
+
+    // dealer initial hand: first visible, second hidden
+    dealCardToAI(dealer, gameDeck, dealer, A1, A2, true);
+    dealCardToAI(dealer, gameDeck, dealer, A1, A2, false);
+
     cout << "Your hand is: " << endl;
     user.printHand();
+    cout << endl;
+    pause(500);
+    dealer.showDealerHand(false);
 }
 
 void resolveBets(Player& p, AIPlayer& dealer, bool playerLose) {
@@ -86,38 +123,31 @@ void resolveBets(Player& p, AIPlayer& dealer, bool playerLose) {
     }
 }
 
-void pause(int ms) {
-    this_thread::sleep_for(std::chrono::milliseconds(ms));
-}
-
-void playAITurn(AIPlayer& ai, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2, bool& aiLose, bool isDealer = false) {
+void playAITurn(AIPlayer& ai, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2, bool& aiLose) {
     pause(500);
     cout << endl;
     cout << ai.getName() << "'s turn has started" << endl;
     cout << endl;
     pause(500);
 
-    if (!isDealer) {
-        int bet = ai.makeBet();
-        ai.placeBet(bet);
-    }
+    int bet = ai.makeBet();
+    ai.placeBet(bet);
 
-    Card newCard = ai.addCard(deck);
-    dealer.observeCard(newCard);
-    A1.observeCard(newCard);
-    A2.observeCard(newCard);
-
-    newCard = ai.addCard(deck);
-    dealer.observeCard(newCard);
-    A1.observeCard(newCard);
-    A2.observeCard(newCard);
+    dealCardToAI(ai, deck, dealer, A1, A2, true);
+    dealCardToAI(ai, deck, dealer, A1, A2, true);
 
     cout << ai.getName() << "'s hand is: " << endl;
     pause(600);
-
     ai.printHand();
 
     pause(500);
+
+    if (ai.getHandValue() == 21) {
+        cout << ai.getName() << " has BlackJack!" << endl;
+        ai.winBlackJackBet();
+        return;
+    }
+
     if (!ai.shouldHit()) {
         cout << ai.getName() << " stands" << endl;
         return;
@@ -127,25 +157,67 @@ void playAITurn(AIPlayer& ai, Deck& deck, AIPlayer& dealer, AIPlayer& A1, AIPlay
         cout << endl;
         cout << ai.getName() << " hits" << endl;
         pause(800);
-        Card newCard = ai.addCard(deck);
-        dealer.observeCard(newCard);
-        A1.observeCard(newCard);
-        A2.observeCard(newCard);
+
+        dealCardToAI(ai, deck, dealer, A1, A2, true);
 
         cout << endl;
         cout << ai.getName() << "'s hand is: " << endl;
         pause(600);
         ai.printHand();
         pause(500);
+
         if (ai.getHandValue() > 21) {
             cout << ai.getName() << " <Bust!>" << endl;
             aiLose = true;
             return;
         }
     }
+
     pause(500);
     cout << endl;
     cout << ai.getName() << " stands" << endl;
+}
+
+void playDealerTurn(AIPlayer& dealer, Deck& deck, AIPlayer& A1, AIPlayer& A2, bool& dealerLose) {
+    pause(500);
+    cout << endl;
+    cout << "Dealer's turn has started" << endl;
+    cout << endl;
+    pause(500);
+
+    cout << "Dealer reveals hidden card:" << endl;
+    dealer.showDealerHand(true);
+
+    const vector<Card>& dealerCards = dealer.getHand().getAllCards();
+    if (dealerCards.size() >= 2) {
+        A1.observeCard(dealerCards[1]);
+        A2.observeCard(dealerCards[1]);
+    }
+
+    pause(500);
+
+    while (dealer.getHandValue() < 17) {
+        cout << endl;
+        cout << "Dealer hits" << endl;
+        pause(800);
+
+        dealCardToAI(dealer, deck, dealer, A1, A2, true);
+
+        cout << endl;
+        cout << "Dealer's hand is: " << endl;
+        pause(600);
+        dealer.showDealerHand(true);
+        pause(500);
+
+        if (dealer.getHandValue() > 21) {
+            cout << "Dealer <Bust!>" << endl;
+            dealerLose = true;
+            return;
+        }
+    }
+
+    cout << endl;
+    cout << "Dealer stands" << endl;
 }
 
 void printResults(int& gamesWon, int gamesPlayed, int userChips, string& playAgain) {
@@ -169,6 +241,7 @@ void printResults(int& gamesWon, int gamesPlayed, int userChips, string& playAga
 void printEndResults(bool youLose, Player& user, AIPlayer& dealer, int& gamesWon, int gamesPlayed, int userChips, string& playAgain) {
     int userHand = user.getHandValue();
     int dealerHand = dealer.getHandValue();
+
     if (youLose) {
         cout << "You lose." << endl;
     }
@@ -188,6 +261,7 @@ void printEndResults(bool youLose, Player& user, AIPlayer& dealer, int& gamesWon
 
 bool handlePlayerTurn(Player& user, Deck& gameDeck, AIPlayer& dealer, AIPlayer& A1, AIPlayer& A2, int gamesPlayed, int& gamesWon, string& playAgain, bool& youLose) {
     string drawAnswer;
+
     if (user.getHandValue() == 21) {
         cout << "BlackJack, You win" << endl;
         user.winBlackJackBet();
@@ -223,6 +297,7 @@ bool handlePlayerTurn(Player& user, Deck& gameDeck, AIPlayer& dealer, AIPlayer& 
             cin >> drawAnswer;
         }
     }
+
     return true;
 }
 
@@ -244,7 +319,6 @@ int main() {
     int gamesPlayed = 0;
 
     while (playAgain == "yes" || playAgain == "Yes") {
-
         setupGame(gameDeck, user, A1, A2, dealer, gamesPlayed);
 
         bool youLose = false;
@@ -259,7 +333,7 @@ int main() {
 
         playAITurn(A1, gameDeck, dealer, A1, A2, AI1Lose);
         playAITurn(A2, gameDeck, dealer, A1, A2, AI2Lose);
-        playAITurn(dealer, gameDeck, dealer, A1, A2, DealerLose, true);
+        playDealerTurn(dealer, gameDeck, A1, A2, DealerLose);
 
         resolveBets(user, dealer, youLose);
         resolveBets(A1, dealer, AI1Lose);

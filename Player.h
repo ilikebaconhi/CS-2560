@@ -22,14 +22,13 @@ class Player{
         void winBlackJackBet(); //when the user gets blackjack in the first two cards drawn
         void loseBet();
         void pushBet();
-
+        Hand getHand() const;
         int getChips() const;
         int getCurrentBet() const;
         string getName() const;
-        int getHandValue();
+        int getHandValue() const;
         Card addCard(Deck& deck);
         void clearHand();
-
         void printHand();
 
 };
